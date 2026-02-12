@@ -242,20 +242,77 @@ async function playReplaySound() {
   });
 }
 
+async function playSpinSound() {
+  const ctx = await ensureAudioCtx();
+  const now = ctx.currentTime;
+
+  // Rising whoosh — filtered noise sweep
+  const bufferSize = ctx.sampleRate * 1.2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(300, now);
+  filter.frequency.exponentialRampToValueAtTime(2400, now + 1.0);
+  filter.Q.value = 3;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.linearRampToValueAtTime(0.04, now + 1.2);
+
+  noise.connect(filter).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 1.2);
+}
+
+async function playLandSound() {
+  const ctx = await ensureAudioCtx();
+  const now = ctx.currentTime;
+
+  // Soft chime ding
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, now);
+  g.gain.linearRampToValueAtTime(0.15, now + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+  osc.connect(g).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.6);
+
+  // Harmonic overtone
+  const osc2 = ctx.createOscillator();
+  osc2.type = 'sine';
+  osc2.frequency.value = 1320;
+
+  const g2 = ctx.createGain();
+  g2.gain.setValueAtTime(0, now);
+  g2.gain.linearRampToValueAtTime(0.06, now + 0.02);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+  osc2.connect(g2).connect(ctx.destination);
+  osc2.start(now);
+  osc2.stop(now + 0.4);
+}
+
 // ───────── Reasons Roulette ─────────
 const REASONS = [
-  'Your laugh is my favorite sound',
-  'You always know how to make me smile',
-  'You never judge me for being weird',
-  'You give the best hugs',
-  'You make even boring days fun',
-  'You always listen when I need to talk',
-  'Your taste in music is impeccable',
-  'You send the best memes',
-  'You make me want to be a better person',
-  'You are the most genuine person I know',
-  'You light up every room you walk into',
-  'You always believe in me',
+  'Your niche hobbies (my lil book worm & stationary hoarder)',
+  "You're cuteeee jeans",
+  'You got a free bag of chips',
+  "You're funny",
+  "You're smart",
+  'I like how you make me feeelll',
+  'That green card',
 ];
 
 const rouletteScene = document.getElementById('roulette-scene');
@@ -280,6 +337,7 @@ function spinRoulette() {
   if (isSpinning) return;
   isSpinning = true;
   spinBtn.classList.add('spinning');
+  playSpinSound();
 
   const finalReason = getNextReason();
 
@@ -311,14 +369,18 @@ function spinRoulette() {
   });
 
   setTimeout(() => {
+    playLandSound();
     spinCount++;
     spinCounter.textContent = `${spinCount} / ${REASONS.length} revealed`;
-    spinBtn.textContent = 'Tap again';
     spinBtn.classList.remove('spinning');
     isSpinning = false;
 
-    if (spinCount >= 3) {
+    if (spinCount >= REASONS.length) {
+      spinBtn.style.display = 'none';
+      spinCounter.textContent = 'All reasons revealed!';
       continueBtn.classList.add('visible');
+    } else {
+      spinBtn.textContent = 'Tap again';
     }
   }, 2000);
 }
@@ -403,6 +465,7 @@ document.getElementById('replay-btn').addEventListener('click', () => {
   usedReasons = [];
   spinCounter.textContent = '';
   spinBtn.textContent = 'Tap to reveal';
+  spinBtn.style.display = '';
   continueBtn.classList.remove('visible');
   rouletteStrip.innerHTML = '<div class="roulette-item"></div>';
   rouletteStrip.style.transition = 'none';
