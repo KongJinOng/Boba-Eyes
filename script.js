@@ -242,6 +242,94 @@ async function playReplaySound() {
   });
 }
 
+// ───────── Reasons Roulette ─────────
+const REASONS = [
+  'Your laugh is my favorite sound',
+  'You always know how to make me smile',
+  'You never judge me for being weird',
+  'You give the best hugs',
+  'You make even boring days fun',
+  'You always listen when I need to talk',
+  'Your taste in music is impeccable',
+  'You send the best memes',
+  'You make me want to be a better person',
+  'You are the most genuine person I know',
+  'You light up every room you walk into',
+  'You always believe in me',
+];
+
+const rouletteScene = document.getElementById('roulette-scene');
+const spinBtn = document.getElementById('spin-btn');
+const continueBtn = document.getElementById('continue-btn');
+const spinCounter = document.getElementById('spin-counter');
+const rouletteStrip = document.getElementById('roulette-strip');
+
+let spinCount = 0;
+let isSpinning = false;
+let usedReasons = [];
+
+function getNextReason() {
+  if (usedReasons.length >= REASONS.length) usedReasons = [];
+  let available = REASONS.filter(r => !usedReasons.includes(r));
+  const pick = available[Math.floor(Math.random() * available.length)];
+  usedReasons.push(pick);
+  return pick;
+}
+
+function spinRoulette() {
+  if (isSpinning) return;
+  isSpinning = true;
+  spinBtn.classList.add('spinning');
+
+  const finalReason = getNextReason();
+
+  // Build a strip of random reasons + the final one at the end
+  const itemCount = 12;
+  let items = [];
+  for (let i = 0; i < itemCount - 1; i++) {
+    items.push(REASONS[Math.floor(Math.random() * REASONS.length)]);
+  }
+  items.push(finalReason);
+
+  // Populate the strip
+  rouletteStrip.innerHTML = items
+    .map(r => `<div class="roulette-item">${r}</div>`)
+    .join('');
+
+  // Animate: scroll from top to the last item
+  const totalHeight = itemCount * 80;
+  const finalOffset = -(totalHeight - 80);
+
+  rouletteStrip.style.transition = 'none';
+  rouletteStrip.style.transform = 'translateY(0)';
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      rouletteStrip.style.transition = 'transform 1.8s cubic-bezier(0.15, 0.85, 0.35, 1)';
+      rouletteStrip.style.transform = `translateY(${finalOffset}px)`;
+    });
+  });
+
+  setTimeout(() => {
+    spinCount++;
+    spinCounter.textContent = `${spinCount} / ${REASONS.length} revealed`;
+    spinBtn.textContent = 'Tap again';
+    spinBtn.classList.remove('spinning');
+    isSpinning = false;
+
+    if (spinCount >= 3) {
+      continueBtn.classList.add('visible');
+    }
+  }, 2000);
+}
+
+spinBtn.addEventListener('click', spinRoulette);
+
+continueBtn.addEventListener('click', () => {
+  rouletteScene.classList.remove('active');
+  document.getElementById('envelope-scene').classList.add('active');
+});
+
 // ───────── Envelope Interaction ─────────
 const envelope = document.getElementById('envelope');
 const envelopeScene = document.getElementById('envelope-scene');
@@ -310,6 +398,16 @@ document.getElementById('replay-btn').addEventListener('click', () => {
   document.getElementById('replay-btn').classList.remove('visible');
   playReplaySound();
 
+  // Reset roulette state
+  spinCount = 0;
+  usedReasons = [];
+  spinCounter.textContent = '';
+  spinBtn.textContent = 'Tap to reveal';
+  continueBtn.classList.remove('visible');
+  rouletteStrip.innerHTML = '<div class="roulette-item"></div>';
+  rouletteStrip.style.transition = 'none';
+  rouletteStrip.style.transform = 'translateY(0)';
+
   cardScene.classList.remove('active');
-  envelopeScene.classList.add('active');
+  rouletteScene.classList.add('active');
 });

@@ -13,8 +13,23 @@
   <div id="yt-player" style="position:absolute;width:0;height:0;overflow:hidden"></div>
   <canvas id="particles"></canvas>
 
+  <!-- Roulette scene -->
+  <div id="roulette-scene" class="scene active">
+    <h2 class="roulette-title">Reasons I Like You</h2>
+    <div class="roulette-machine">
+      <div class="roulette-window">
+        <div id="roulette-strip">
+          <div class="roulette-item"></div>
+        </div>
+      </div>
+    </div>
+    <button id="spin-btn" class="spin-btn">Tap to reveal</button>
+    <div id="spin-counter" class="spin-counter"></div>
+    <button id="continue-btn" class="continue-btn">Continue &rarr;</button>
+  </div>
+
   <!-- Envelope scene -->
-  <div id="envelope-scene" class="scene active">
+  <div id="envelope-scene" class="scene">
     <div class="prompt-text">Tap the envelope</div>
     <div id="envelope" class="envelope">
       <div class="envelope-back"></div>

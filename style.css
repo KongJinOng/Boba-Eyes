@@ -328,6 +328,137 @@ body {
   background: rgba(155, 89, 182, 0.45);
 }
 
+/* ───────── Roulette ───────── */
+.roulette-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #e8d5f5;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 8px rgba(100, 50, 150, 0.4);
+}
+
+.roulette-machine {
+  position: relative;
+  width: 320px;
+  margin-bottom: 28px;
+}
+
+.roulette-window {
+  position: relative;
+  height: 80px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(200, 170, 230, 0.4);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+#roulette-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 0.1s linear;
+}
+
+.roulette-item {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #f0e6f6;
+  line-height: 1.4;
+}
+
+.roulette-window::before,
+.roulette-window::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.roulette-window::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(45, 27, 78, 0.8), transparent);
+}
+
+.roulette-window::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(45, 27, 78, 0.8), transparent);
+}
+
+.spin-btn {
+  background: linear-gradient(135deg, #9b59b6, #7b3fa0);
+  border: none;
+  color: #f5eefa;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 14px 36px;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 24px rgba(100, 50, 150, 0.4);
+}
+
+.spin-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(100, 50, 150, 0.5);
+}
+
+.spin-btn:active {
+  transform: scale(0.97);
+}
+
+.spin-btn.spinning {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.spin-counter {
+  margin-top: 16px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.85rem;
+  color: #c09ee0;
+  letter-spacing: 1px;
+  min-height: 20px;
+}
+
+.continue-btn {
+  margin-top: 12px;
+  background: rgba(155, 89, 182, 0.25);
+  border: 1px solid rgba(200, 170, 230, 0.4);
+  color: #d4b8e8;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  padding: 10px 24px;
+  border-radius: 50px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, background 0.3s ease;
+}
+
+.continue-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.continue-btn:hover {
+  background: rgba(155, 89, 182, 0.45);
+}
+
 /* ───────── Responsive ───────── */
 @media (max-width: 480px) {
   .envelope {
@@ -358,5 +489,13 @@ body {
 
   .card-inside {
     padding: 28px 20px;
+  }
+
+  .roulette-title {
+    font-size: 2rem;
+  }
+
+  .roulette-machine {
+    width: 270px;
   }
 }
