@@ -7,8 +7,7 @@ let bgMusicStarted = false;
 
 function onYouTubeIframeAPIReady() {
   ytPlayer = new YT.Player('yt-player', {
-    videoId: YOUTUBE_VIDEO_ID,
-    playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: YOUTUBE_VIDEO_ID },
+    playerVars: { controls: 0, loop: 1, playlist: YOUTUBE_VIDEO_ID },
     events: {
       onReady: () => { ytReady = true; }
     }
@@ -16,8 +15,8 @@ function onYouTubeIframeAPIReady() {
 }
 
 function startBgMusic() {
-  if (!bgMusicStarted && ytReady && ytPlayer && ytPlayer.playVideo) {
-    ytPlayer.playVideo();
+  if (!bgMusicStarted && ytReady && ytPlayer && ytPlayer.loadVideoById) {
+    ytPlayer.loadVideoById(YOUTUBE_VIDEO_ID);
     bgMusicStarted = true;
   }
 }
