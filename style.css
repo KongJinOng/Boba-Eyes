@@ -1,0 +1,362 @@
+/* ───────── Reset & Base ───────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2d1b4e 0%, #4a2d6b 30%, #6b3fa0 60%, #8b5fbf 100%);
+  font-family: 'Quicksand', sans-serif;
+  overflow: hidden;
+  color: #f5eefa;
+}
+
+/* ───────── Particle Canvas ───────── */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ───────── Scenes ───────── */
+.scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.scene.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ───────── Prompt Text ───────── */
+.prompt-text {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  color: #d4b8e8;
+  margin-bottom: 24px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ───────── Envelope ───────── */
+.envelope {
+  position: relative;
+  width: 280px;
+  height: 180px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.envelope:hover {
+  transform: scale(1.05);
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #c9a6e8, #a57bcf);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(100, 50, 150, 0.4);
+}
+
+.envelope-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background: linear-gradient(to bottom, #d4bbe8, #b48fd4);
+  border-radius: 0 0 8px 8px;
+  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 100%, 0 100%);
+  z-index: 2;
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: linear-gradient(to bottom, #e0cff0, #c9a6e8);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top center;
+  transition: transform 0.6s ease;
+  z-index: 3;
+}
+
+.envelope.opened .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+.envelope-letter {
+  position: absolute;
+  top: 10%;
+  left: 8%;
+  right: 8%;
+  height: 75%;
+  background: #faf5ff;
+  border-radius: 4px;
+  z-index: 1;
+  transition: transform 0.6s ease 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.envelope.opened .envelope-letter {
+  transform: translateY(-120%);
+}
+
+.letter-content {
+  text-align: center;
+}
+
+.letter-heart {
+  font-size: 2.5rem;
+  color: #9b59b6;
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+
+/* ───────── Card Container ───────── */
+.card-container {
+  perspective: 1200px;
+}
+
+.card {
+  position: relative;
+  width: 340px;
+  height: 460px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card.opened {
+  cursor: default;
+}
+
+.card.opened:hover {
+  transform: none;
+}
+
+/* ───────── Card Front ───────── */
+.card-front {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #e8d5f5 0%, #d4b8e8 30%, #c09ee0 60%, #a87bd4 100%);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(80, 30, 120, 0.35);
+  backface-visibility: hidden;
+  z-index: 2;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+.card.opened .card-front {
+  transform: rotateY(-160deg);
+  box-shadow: none;
+}
+
+.card-front-decoration {
+  margin-bottom: 24px;
+}
+
+.heart-burst span {
+  display: inline-block;
+  font-size: 1.6rem;
+  color: #7b3fa0;
+  margin: 0 4px;
+  animation: float-heart 3s ease-in-out infinite;
+}
+
+.heart-burst span:nth-child(1) { animation-delay: 0s; }
+.heart-burst span:nth-child(2) { animation-delay: 0.4s; font-size: 1.2rem; }
+.heart-burst span:nth-child(3) { animation-delay: 0.2s; font-size: 2.2rem; color: #9b59b6; }
+.heart-burst span:nth-child(4) { animation-delay: 0.6s; font-size: 1.2rem; }
+.heart-burst span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes float-heart {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.card-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #4a1a6b;
+  text-align: center;
+  margin-bottom: 12px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.card-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #6b2d9e;
+  text-shadow: 0 2px 4px rgba(107, 45, 158, 0.2);
+}
+
+.card-hint {
+  position: absolute;
+  bottom: 24px;
+  font-size: 0.85rem;
+  color: #8b6aad;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+/* ───────── Card Inside ───────── */
+.card-inside {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(170deg, #faf5ff 0%, #f0e6f6 50%, #e8d5f0 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 28px;
+  box-shadow: 0 12px 40px rgba(80, 30, 120, 0.35);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.4s;
+}
+
+.card.opened .card-inside {
+  opacity: 1;
+}
+
+.card-message {
+  text-align: center;
+}
+
+.greeting {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #6b2d9e;
+  margin-bottom: 20px;
+}
+
+.message-body {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a2d6b;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.closing {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.3rem;
+  color: #7b3fa0;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+.signature {
+  font-size: 2rem;
+  color: #9b59b6;
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+/* ───────── Replay Button ───────── */
+.replay-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: rgba(155, 89, 182, 0.25);
+  border: 1px solid rgba(200, 170, 230, 0.4);
+  color: #d4b8e8;
+  font-size: 1.1rem;
+  padding: 10px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease, background 0.3s ease;
+  z-index: 10;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.replay-btn.visible {
+  opacity: 1;
+}
+
+.replay-btn:hover {
+  background: rgba(155, 89, 182, 0.45);
+}
+
+/* ───────── Responsive ───────── */
+@media (max-width: 480px) {
+  .envelope {
+    width: 240px;
+    height: 155px;
+  }
+
+  .card {
+    width: 290px;
+    height: 400px;
+  }
+
+  .card-title {
+    font-size: 1.8rem;
+  }
+
+  .card-name {
+    font-size: 2.2rem;
+  }
+
+  .greeting {
+    font-size: 1.4rem;
+  }
+
+  .message-body {
+    font-size: 0.92rem;
+  }
+
+  .card-inside {
+    padding: 28px 20px;
+  }
+}

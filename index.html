@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Valentine's Day, Jiselle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <!-- Envelope scene -->
+  <div id="envelope-scene" class="scene active">
+    <div class="prompt-text">Tap the envelope</div>
+    <div id="envelope" class="envelope">
+      <div class="envelope-back"></div>
+      <div class="envelope-letter">
+        <div class="letter-content">
+          <span class="letter-heart">&hearts;</span>
+        </div>
+      </div>
+      <div class="envelope-front"></div>
+      <div class="envelope-flap"></div>
+    </div>
+  </div>
+
+  <!-- Card scene -->
+  <div id="card-scene" class="scene">
+    <div class="card-container">
+      <div id="card" class="card">
+        <div class="card-front">
+          <div class="card-front-decoration">
+            <div class="heart-burst">
+              <span>&hearts;</span><span>&hearts;</span><span>&hearts;</span>
+              <span>&hearts;</span><span>&hearts;</span>
+            </div>
+          </div>
+          <h1 class="card-title">Happy Valentine's Day</h1>
+          <p class="card-name">Jiselle</p>
+          <p class="card-hint">Click to open</p>
+        </div>
+        <div class="card-inside">
+          <div class="card-message">
+            <p class="greeting">My Dearest Jiselle,</p>
+            <p class="message-body">
+              Every moment with you feels like a dream I never want to wake up from.
+              You make the ordinary feel extraordinary, and my world is infinitely
+              more beautiful because you're in it.
+            </p>
+            <p class="message-body">
+              Thank you for being my favorite person, my safe place,
+              and the reason I smile every single day.
+            </p>
+            <p class="closing">Forever & Always Yours,</p>
+            <p class="signature">&hearts;</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button id="replay-btn" class="replay-btn" title="Replay">&#8634; Replay</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
