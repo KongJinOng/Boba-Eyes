@@ -802,6 +802,12 @@ body {
     font-size: 2.2rem;
   }
 
+  .card-hint {
+    bottom: auto;
+    position: relative;
+    margin-top: 16px;
+  }
+
   .greeting {
     font-size: 1.4rem;
   }
