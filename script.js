@@ -246,29 +246,28 @@ async function playSpinSound() {
   const ctx = await ensureAudioCtx();
   const now = ctx.currentTime;
 
-  // Rising whoosh — filtered noise sweep
-  const bufferSize = ctx.sampleRate * 1.2;
-  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  // Clicking roulette roll — rapid ticks that slow down
+  const totalClicks = 18;
+  const totalDuration = 1.8;
+  for (let i = 0; i < totalClicks; i++) {
+    // Easing: clicks start fast then slow down (quadratic ease-out)
+    const t = (i / totalClicks);
+    const time = now + t * t * totalDuration;
+    const vol = 0.08 + 0.07 * (1 - t); // louder at start, softer at end
+
+    const osc = ctx.createOscillator();
+    osc.type = 'square';
+    osc.frequency.value = 800 + Math.random() * 200;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(vol, time + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+
+    osc.connect(g).connect(ctx.destination);
+    osc.start(time);
+    osc.stop(time + 0.04);
   }
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.frequency.setValueAtTime(300, now);
-  filter.frequency.exponentialRampToValueAtTime(2400, now + 1.0);
-  filter.Q.value = 3;
-
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.12, now);
-  gain.gain.linearRampToValueAtTime(0.04, now + 1.2);
-
-  noise.connect(filter).connect(gain).connect(ctx.destination);
-  noise.start(now);
-  noise.stop(now + 1.2);
 }
 
 async function playLandSound() {
