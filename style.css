@@ -153,8 +153,8 @@ body {
 
 .card {
   position: relative;
-  width: 340px;
-  height: 460px;
+  width: 600px;
+  height: 600px;
   cursor: pointer;
   transform-style: preserve-3d;
   transition: transform 0.3s ease;
