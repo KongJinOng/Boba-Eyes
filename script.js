@@ -246,27 +246,53 @@ async function playSpinSound() {
   const ctx = await ensureAudioCtx();
   const now = ctx.currentTime;
 
-  // Clicking roulette roll — rapid ticks that slow down
-  const totalClicks = 18;
+  // Lucky-draw wheel flaps — soft peg hits that slow down
+  const totalFlaps = 20;
   const totalDuration = 1.8;
-  for (let i = 0; i < totalClicks; i++) {
-    // Easing: clicks start fast then slow down (quadratic ease-out)
-    const t = (i / totalClicks);
-    const time = now + t * t * totalDuration;
-    const vol = 0.08 + 0.07 * (1 - t); // louder at start, softer at end
 
+  // Pre-create a short noise buffer for the woody "flap" texture
+  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.07, ctx.sampleRate);
+  const noiseData = noiseBuf.getChannelData(0);
+  for (let j = 0; j < noiseData.length; j++) {
+    noiseData[j] = (Math.random() * 2 - 1) * (1 - j / noiseData.length);
+  }
+
+  for (let i = 0; i < totalFlaps; i++) {
+    const t = i / totalFlaps;
+    const time = now + t * t * totalDuration;
+    const vol = 0.10 + 0.06 * (1 - t);
+
+    // Soft triangle tone — the main "flap" body
     const osc = ctx.createOscillator();
-    osc.type = 'square';
-    osc.frequency.value = 800 + Math.random() * 200;
+    osc.type = 'triangle';
+    osc.frequency.value = 280 + Math.random() * 80;
 
     const g = ctx.createGain();
     g.gain.setValueAtTime(0, time);
-    g.gain.linearRampToValueAtTime(vol, time + 0.003);
-    g.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+    g.gain.linearRampToValueAtTime(vol, time + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.07);
 
     osc.connect(g).connect(ctx.destination);
     osc.start(time);
-    osc.stop(time + 0.04);
+    osc.stop(time + 0.07);
+
+    // Tiny noise burst — woody/plasticky peg texture
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+
+    const nf = ctx.createBiquadFilter();
+    nf.type = 'bandpass';
+    nf.frequency.value = 600;
+    nf.Q.value = 1.5;
+
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0, time);
+    ng.gain.linearRampToValueAtTime(vol * 0.5, time + 0.005);
+    ng.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+    noise.connect(nf).connect(ng).connect(ctx.destination);
+    noise.start(time);
+    noise.stop(time + 0.07);
   }
 }
 
