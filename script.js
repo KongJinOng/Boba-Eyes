@@ -107,14 +107,14 @@ animateParticles();
 // ───────── Sound Effects (Web Audio API) ─────────
 let audioCtx;
 
-function getAudioCtx() {
+async function ensureAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
   return audioCtx;
 }
 
-function playEnvelopeSound() {
-  const ctx = getAudioCtx();
+async function playEnvelopeSound() {
+  const ctx = await ensureAudioCtx();
   const now = ctx.currentTime;
 
   // Soft whoosh — rising filtered noise
@@ -158,8 +158,8 @@ function playEnvelopeSound() {
   });
 }
 
-function playCardOpenSound() {
-  const ctx = getAudioCtx();
+async function playCardOpenSound() {
+  const ctx = await ensureAudioCtx();
   const now = ctx.currentTime;
 
   // Magical sparkle arpeggio
@@ -197,8 +197,8 @@ function playCardOpenSound() {
   });
 }
 
-function playReplaySound() {
-  const ctx = getAudioCtx();
+async function playReplaySound() {
+  const ctx = await ensureAudioCtx();
   const now = ctx.currentTime;
 
   // Quick descending chime
