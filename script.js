@@ -104,6 +104,119 @@ function animateParticles() {
 
 animateParticles();
 
+// ───────── Sound Effects (Web Audio API) ─────────
+let audioCtx;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playEnvelopeSound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  // Soft whoosh — rising filtered noise
+  const bufferSize = ctx.sampleRate * 0.6;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(400, now);
+  filter.frequency.linearRampToValueAtTime(1800, now + 0.3);
+  filter.Q.value = 2;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.15, now);
+  gain.gain.linearRampToValueAtTime(0, now + 0.5);
+
+  noise.connect(filter).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.6);
+
+  // Gentle chime
+  [523, 659, 784].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now + i * 0.12);
+    g.gain.linearRampToValueAtTime(0.12, now + i * 0.12 + 0.05);
+    g.gain.linearRampToValueAtTime(0, now + i * 0.12 + 0.5);
+
+    osc.connect(g).connect(ctx.destination);
+    osc.start(now + i * 0.12);
+    osc.stop(now + i * 0.12 + 0.5);
+  });
+}
+
+function playCardOpenSound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  // Magical sparkle arpeggio
+  const notes = [523, 659, 784, 1047, 1319, 1568];
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+
+    const g = ctx.createGain();
+    const t = now + i * 0.09;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.1, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+
+    osc.connect(g).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.8);
+  });
+
+  // Warm pad chord underneath
+  [262, 330, 392].forEach(freq => {
+    const osc = ctx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now + 0.1);
+    g.gain.linearRampToValueAtTime(0.06, now + 0.4);
+    g.gain.linearRampToValueAtTime(0, now + 2.0);
+
+    osc.connect(g).connect(ctx.destination);
+    osc.start(now + 0.1);
+    osc.stop(now + 2.0);
+  });
+}
+
+function playReplaySound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  // Quick descending chime
+  [784, 659, 523].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, now + i * 0.08);
+    g.gain.linearRampToValueAtTime(0.08, now + i * 0.08 + 0.03);
+    g.gain.linearRampToValueAtTime(0, now + i * 0.08 + 0.35);
+
+    osc.connect(g).connect(ctx.destination);
+    osc.start(now + i * 0.08);
+    osc.stop(now + i * 0.08 + 0.35);
+  });
+}
+
 // ───────── Envelope Interaction ─────────
 const envelope = document.getElementById('envelope');
 const envelopeScene = document.getElementById('envelope-scene');
@@ -113,6 +226,7 @@ envelope.addEventListener('click', () => {
   if (envelope.classList.contains('opened')) return;
 
   envelope.classList.add('opened');
+  playEnvelopeSound();
 
   // Transition to card scene after envelope animation
   setTimeout(() => {
@@ -133,6 +247,7 @@ card.addEventListener('click', () => {
   if (card.classList.contains('opened')) return;
 
   card.classList.add('opened');
+  playCardOpenSound();
 
   // Burst of hearts on open
   spawnHeartBurst();
@@ -166,6 +281,7 @@ document.getElementById('replay-btn').addEventListener('click', () => {
   envelope.classList.remove('opened');
 
   document.getElementById('replay-btn').classList.remove('visible');
+  playReplaySound();
 
   cardScene.classList.remove('active');
   envelopeScene.classList.add('active');
