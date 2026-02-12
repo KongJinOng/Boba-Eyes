@@ -308,10 +308,10 @@ const REASONS = [
   'Your niche hobbies (my lil book worm & stationary hoarder)',
   "You're cuteeee jeans",
   'You got a free bag of chips',
-  "You're funny",
-  "You're smart",
+  "You think I'm funnnyyyy?",
+  "You're lowkey smarttt queen",
   'I like how you make me feeelll',
-  'That green card',
+  'That green card frfr',
 ];
 
 const rouletteScene = document.getElementById('roulette-scene');
