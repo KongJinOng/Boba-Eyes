@@ -7,22 +7,25 @@ let bgMusicStarted = false;
 
 function onYouTubeIframeAPIReady() {
   ytPlayer = new YT.Player('yt-player', {
-    playerVars: { controls: 0, loop: 1, playlist: YOUTUBE_VIDEO_ID },
+    videoId: YOUTUBE_VIDEO_ID,
+    playerVars: { autoplay: 1, controls: 0, loop: 1, playlist: YOUTUBE_VIDEO_ID },
     events: {
-      onReady: () => { ytReady = true; }
+      onReady: (e) => {
+        // Browsers require muted autoplay — unmute on first click
+        e.target.mute();
+        e.target.playVideo();
+        ytReady = true;
+      }
     }
   });
 }
 
-function startBgMusic() {
-  if (!bgMusicStarted && ytReady && ytPlayer && ytPlayer.loadVideoById) {
-    ytPlayer.loadVideoById(YOUTUBE_VIDEO_ID);
-    bgMusicStarted = true;
+// Unmute on first user interaction
+document.addEventListener('click', () => {
+  if (ytReady && ytPlayer && ytPlayer.unMute) {
+    ytPlayer.unMute();
   }
-}
-
-// Start background music on first user interaction
-document.addEventListener('click', startBgMusic, { once: true });
+}, { once: true });
 
 // ───────── Floating Particles (Hearts & Sparkles) ─────────
 const canvas = document.getElementById('particles');
