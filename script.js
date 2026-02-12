@@ -271,7 +271,9 @@ card.addEventListener('click', () => {
 
   card.classList.add('opened');
   playCardOpenSound();
-  startBgMusic();
+
+  // Start music after the card flip animation (0.8s)
+  setTimeout(startBgMusic, 800);
 
   // Burst of hearts on open
   spawnHeartBurst();
