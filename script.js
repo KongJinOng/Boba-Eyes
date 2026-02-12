@@ -1,3 +1,15 @@
+// ───────── YouTube Player (card-open song) ─────────
+const YOUTUBE_VIDEO_ID = 'dQw4w9WgXcQ'; // ← Replace with your video ID
+
+let ytPlayer;
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    videoId: YOUTUBE_VIDEO_ID,
+    playerVars: { autoplay: 0, controls: 0 },
+    events: { onReady: () => {} }
+  });
+}
+
 // ───────── Floating Particles (Hearts & Sparkles) ─────────
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
@@ -158,43 +170,11 @@ async function playEnvelopeSound() {
   });
 }
 
-async function playCardOpenSound() {
-  const ctx = await ensureAudioCtx();
-  const now = ctx.currentTime;
-
-  // Magical sparkle arpeggio
-  const notes = [523, 659, 784, 1047, 1319, 1568];
-  notes.forEach((freq, i) => {
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-
-    const g = ctx.createGain();
-    const t = now + i * 0.09;
-    g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.1, t + 0.03);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
-
-    osc.connect(g).connect(ctx.destination);
-    osc.start(t);
-    osc.stop(t + 0.8);
-  });
-
-  // Warm pad chord underneath
-  [262, 330, 392].forEach(freq => {
-    const osc = ctx.createOscillator();
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0, now + 0.1);
-    g.gain.linearRampToValueAtTime(0.06, now + 0.4);
-    g.gain.linearRampToValueAtTime(0, now + 2.0);
-
-    osc.connect(g).connect(ctx.destination);
-    osc.start(now + 0.1);
-    osc.stop(now + 2.0);
-  });
+function playCardOpenSound() {
+  if (ytPlayer && ytPlayer.playVideo) {
+    ytPlayer.seekTo(0);
+    ytPlayer.playVideo();
+  }
 }
 
 async function playReplaySound() {
@@ -277,6 +257,9 @@ function spawnHeartBurst() {
 
 // ───────── Replay ─────────
 document.getElementById('replay-btn').addEventListener('click', () => {
+  // Stop YouTube audio
+  if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+
   // Reset everything
   card.classList.remove('opened');
   envelope.classList.remove('opened');
