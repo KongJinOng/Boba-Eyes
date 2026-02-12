@@ -6,17 +6,27 @@
   <title>Happy Valentine's Day, Jiselle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="yt-player" style="position:absolute;width:0;height:0;overflow:hidden"></div>
   <canvas id="particles"></canvas>
 
+  <!-- Scrapbook sticker decorations -->
+  <div class="sticker sticker--1">&#x1F338;</div>
+  <div class="sticker sticker--2">&#x2B50;</div>
+  <div class="sticker sticker--3">&#x1F33F;</div>
+  <div class="sticker sticker--4">&#x1F98B;</div>
+  <div class="sticker sticker--5">&#x2764;</div>
+  <div class="sticker sticker--6">&#x2728;</div>
+
   <!-- Roulette scene -->
   <div id="roulette-scene" class="scene active">
     <h2 class="roulette-title">Reasons I Like You</h2>
     <div class="roulette-machine">
+      <div class="washi-tape washi-tape--pink" style="top:-14px;left:-20px;transform:rotate(-3deg)"></div>
+      <div class="washi-tape washi-tape--green" style="top:-14px;right:-20px;left:auto;transform:rotate(2deg)"></div>
       <div class="roulette-window">
         <div id="roulette-strip">
           <div class="roulette-item"></div>
@@ -47,6 +57,10 @@
   <div id="card-scene" class="scene">
     <div class="card-container">
       <div id="card" class="card">
+        <div class="tape-corner tape-corner--tl"></div>
+        <div class="tape-corner tape-corner--tr"></div>
+        <div class="tape-corner tape-corner--bl"></div>
+        <div class="tape-corner tape-corner--br"></div>
         <div class="card-front">
           <div class="card-front-decoration">
             <div class="heart-burst">

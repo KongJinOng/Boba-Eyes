@@ -51,8 +51,8 @@ class Particle {
     this.type = Math.random() > 0.4 ? 'heart' : 'sparkle';
     this.rotation = Math.random() * Math.PI * 2;
     this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-    // Purple-lavender color palette
-    const colors = ['#c9a6e8', '#a57bcf', '#d4bbe8', '#9b59b6', '#e8d5f5', '#7b3fa0'];
+    // Warm scrapbook color palette
+    const colors = ['#d4a0a0', '#c0605a', '#d4b896', '#b8ccb0', '#c8b0d8', '#dcc890'];
     this.color = colors[Math.floor(Math.random() * colors.length)];
   }
 
