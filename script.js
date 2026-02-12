@@ -1,5 +1,5 @@
 // ───────── YouTube Background Music ─────────
-const YOUTUBE_VIDEO_ID = 'iEIG0_wwTHg'; // Just the video ID, not the full URL
+const YOUTUBE_VIDEO_ID = '4fhqI_qoTco'; // Just the video ID, not the full URL
 
 let ytPlayer;
 let ytReady = false;
