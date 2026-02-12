@@ -274,8 +274,7 @@ card.addEventListener('click', () => {
   card.classList.add('opened');
   playCardOpenSound();
 
-  // Start music mid-flip
-  setTimeout(startBgMusic, 300);
+  startBgMusic();
 
   // Burst of hearts on open
   spawnHeartBurst();
