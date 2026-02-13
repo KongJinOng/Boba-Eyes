@@ -400,10 +400,6 @@ function spinRoulette() {
     spinBtn.classList.remove('spinning');
     isSpinning = false;
 
-    if (spinCount >= 4) {
-      document.getElementById('skip-btn').classList.add('visible');
-    }
-
     if (spinCount >= REASONS.length) {
       spinBtn.style.display = 'none';
       spinCounter.textContent = 'All reasons revealed!';
@@ -501,7 +497,6 @@ document.getElementById('replay-btn').addEventListener('click', () => {
   spinBtn.textContent = 'Tap to reveal';
   spinBtn.style.display = '';
   continueBtn.classList.remove('visible');
-  document.getElementById('skip-btn').classList.remove('visible');
   rouletteStrip.innerHTML = '<div class="roulette-item"></div>';
   rouletteStrip.style.transition = 'none';
   rouletteStrip.style.transform = 'translateY(0)';
