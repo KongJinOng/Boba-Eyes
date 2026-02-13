@@ -646,6 +646,24 @@ body {
   transform: rotate(-1deg);
 }
 
+.skip-btn {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  color: #a8906a;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.skip-btn:hover {
+  opacity: 1;
+}
+
 /* ───────── Sticker decorations ───────── */
 .sticker {
   position: fixed;
