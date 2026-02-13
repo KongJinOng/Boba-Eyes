@@ -17,7 +17,7 @@ function onYouTubeIframeAPIReady() {
 
 function startBgMusic() {
   if (ytReady && ytPlayer && ytPlayer.playVideo) {
-    ytPlayer.seekTo(39);
+    ytPlayer.seekTo(39.5);
     ytPlayer.playVideo();
   }
 }
