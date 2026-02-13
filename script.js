@@ -332,10 +332,10 @@ async function playLandSound() {
 // ───────── Reasons Roulette ─────────
 const REASONS = [
   'Your niche hobbies (my lil book worm & stationary hoarder)',
-  "Your Pentatonic Ussy",
+  "Pentatonic P*ssy",
   'You got a free bag of chips',
-  "We're Jessie & James",
-  "We ride or die thru thick n thinnn",
+  "We're like Jessie & James from Team Rocket",
+  "Imma stick with you through thick n thin",
   'I like how you make me feeelll',
   'That green card frfr',
 ];
