@@ -1,5 +1,5 @@
 // ───────── YouTube Background Music ─────────
-const YOUTUBE_VIDEO_ID = '4fhqI_qoTco'; // Just the video ID, not the full URL
+const YOUTUBE_VIDEO_ID = 'NM4e606yFJg'; // Just the video ID, not the full URL
 
 let ytPlayer;
 let ytReady = false;
@@ -17,7 +17,7 @@ function onYouTubeIframeAPIReady() {
 
 function startBgMusic() {
   if (ytReady && ytPlayer && ytPlayer.playVideo) {
-    ytPlayer.seekTo(0);
+    ytPlayer.seekTo(39);
     ytPlayer.playVideo();
   }
 }
